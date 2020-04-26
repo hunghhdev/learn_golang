@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 func main() {
 	nums := [...]int{1, 2, 3, 4}
@@ -8,19 +11,14 @@ func main() {
 }
 
 func smallerNumbersThanCurrent(nums []int) []int {
-	var arr []int
-	for _, num := range nums {
-		arr = append(arr, countNumberSmall(nums, num))
+	sortedNums := make([]int, len(nums))
+	copy(sortedNums, nums)
+	sort.Ints(sortedNums)
+	counts := make([]int, len(nums))
+	for i, num := range nums {
+		counts[i] = sort.Search(len(sortedNums), func(j int) bool {
+			return num <= sortedNums[j]
+		})
 	}
-	return arr
-}
-
-func countNumberSmall(nums []int, num int) int {
-	var count = 0
-	for i := 0; i < len(nums); i++ {
-		if nums[i] < num {
-			count++
-		}
-	}
-	return count
+	return counts
 }
