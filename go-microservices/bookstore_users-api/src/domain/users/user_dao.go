@@ -2,6 +2,7 @@ package users
 
 import (
 	"fmt"
+	users_db "users/src/datasources/mysql/users"
 	"users/src/utils/date_utils"
 	"users/src/utils/errors"
 )
@@ -12,6 +13,9 @@ var (
 
 // Get user by id
 func (user *User) Get() *errors.RestErr {
+	if err := users_db.Client.Ping(); err != nil {
+		panic(err)
+	}
 	result := usersDB[user.ID]
 	if result == nil {
 		return errors.NewNotFoundError(fmt.Sprintf("user %d not found", user.ID))
