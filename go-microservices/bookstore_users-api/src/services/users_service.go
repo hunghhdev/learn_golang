@@ -5,8 +5,9 @@ import (
 	"users/src/utils/errors"
 )
 
-func GetUser(userId int64) (*users.User, *errors.RestErr) {
-	result := &users.User{ID: userId}
+// GetUser just create
+func GetUser(userID int64) (*users.User, *errors.RestErr) {
+	result := &users.User{ID: userID}
 	if err := result.Get(); err != nil {
 		return nil, err
 	}
