@@ -5,6 +5,10 @@ import (
 	"users/src/utils/errors"
 )
 
+const (
+	StatusActive = "active"
+)
+
 // User entity
 type User struct {
 	ID          int64  `json:"id"`
@@ -12,6 +16,8 @@ type User struct {
 	LastName    string `json:"last_name"`
 	Email       string `json:"email"`
 	DateCreated string `json:"date_created"`
+	Status      string `json:"status"`
+	Password    string `json:"-"`
 }
 
 // Validate user
