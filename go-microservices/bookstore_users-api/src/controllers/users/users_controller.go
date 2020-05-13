@@ -14,8 +14,16 @@ var (
 	counter int
 )
 
-// CreateUser api
-func CreateUser(c *gin.Context) {
+func getUserID(userIDParam string) (int64, *errors.RestErr) {
+	userID, userErr := strconv.ParseInt(userIDParam, 10, 64)
+	if userErr != nil {
+		return 0, errors.NewBadRequestError("user id should be a number")
+	}
+	return userID, nil
+}
+
+// Create api
+func Create(c *gin.Context) {
 	var user users.User
 	if err := c.ShouldBindJSON(&user); err != nil {
 		restErr := errors.NewBadRequestError("invalid json body")
@@ -31,12 +39,11 @@ func CreateUser(c *gin.Context) {
 	c.JSON(http.StatusCreated, result)
 }
 
-// GetUser api
-func GetUser(c *gin.Context) {
-	userID, userErr := strconv.ParseInt(c.Param("user_id"), 10, 64)
-	if userErr != nil {
-		err := errors.NewBadRequestError("user id should be a number")
-		c.JSON(err.Status, err)
+// Get api
+func Get(c *gin.Context) {
+	userID, idErr := getUserID(c.Param("user_id"))
+	if idErr != nil {
+		c.JSON(idErr.Status, idErr)
 		return
 	}
 
@@ -48,14 +55,14 @@ func GetUser(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
-// UpdateUser api
-func UpdateUser(c *gin.Context) {
-	userID, userErr := strconv.ParseInt(c.Param("user_id"), 10, 64)
-	if userErr != nil {
-		err := errors.NewBadRequestError("user id should be a number")
-		c.JSON(err.Status, err)
+// Update api
+func Update(c *gin.Context) {
+	userID, idErr := getUserID(c.Param("user_id"))
+	if idErr != nil {
+		c.JSON(idErr.Status, idErr)
 		return
 	}
+
 	var user users.User
 	if err := c.ShouldBindJSON(&user); err != nil {
 		restErr := errors.NewBadRequestError("invalid json body")
@@ -73,4 +80,20 @@ func UpdateUser(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, result)
+}
+
+// Delete user
+func Delete(c *gin.Context) {
+	userID, idErr := getUserID(c.Param("user_id"))
+	if idErr != nil {
+		c.JSON(idErr.Status, idErr)
+		return
+	}
+
+	if deleteErr := services.DeleteUser(userID); deleteErr != nil {
+		c.JSON(deleteErr.Status, deleteErr)
+		return
+	}
+	c.JSON(http.StatusOK, map[string]string{"status": "deleted"})
+
 }
