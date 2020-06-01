@@ -23,7 +23,7 @@ type RestUsersRepository interface {
 type usersRepository struct {
 }
 
-func NewRepository() RestUsersRepository {
+func NewRestUsersRepository() RestUsersRepository {
 	return &usersRepository{}
 }
 
