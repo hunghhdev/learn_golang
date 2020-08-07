@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"runtime"
 	"time"
 )
@@ -9,7 +10,6 @@ import (
 func g1() {
 	fmt.Println("g1")
 	os.OpenFile()
-	
 }
 
 func g2() {
