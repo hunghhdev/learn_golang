@@ -19,11 +19,9 @@ func twoSum(nums []int, target int) []int {
 	var m map[int]int
 	m = make(map[int]int)
 	for i := 0; i < len(nums); i++ {
-		for key, value := range m {
-			if key == nums[i] {
-				result = append(result, value, i)
-				return result
-			}
+		if val, ok := m[nums[i]]; ok {
+			result = append(result, val, i)
+			return result
 		}
 		m[target-nums[i]] = i
 	}
@@ -33,8 +31,8 @@ func twoSum(nums []int, target int) []int {
 func main() {
 	// nums := [...]int{2, 7, 11, 15}
 	// fmt.Println(twoSum(nums[:], 9))
-	// nums := [...]int{3, 2, 4}
-	// fmt.Println(twoSum(nums[:], 6))
-	nums := [...]int{3, 2, 3}
+	nums := [...]int{3, 2, 4}
 	fmt.Println(twoSum(nums[:], 6))
+	// nums := [...]int{3, 2, 3}
+	// fmt.Println(twoSum(nums[:], 6))
 }
